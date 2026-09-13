@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Computer Science — Interactive Mind Map</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #121212;
+      color: #e0e0e0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: #1e1e1e;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #2c2c2c;
+      flex-shrink: 0;
+    }
+    header h1 { font-size: 1.15rem; font-weight: 600; color: #eeeeee; }
+    header .controls { display: flex; gap: 10px; }
+    header button {
+      background: #2a2a2a; color: #e0e0e0; border: 1px solid #3a3a3a;
+      padding: 7px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem;
+      transition: all 0.15s ease;
+    }
+    header button:hover { background: #333; border-color: #4a4a4a; color: #fff; }
+    #mindmap { flex: 1; width: 100%; height: 100%; background: #121212; }
+    .hint {
+      position: absolute; bottom: 16px; left: 16px;
+      background: rgba(30,30,30,0.95); padding: 8px 14px; border-radius: 8px;
+      font-size: 0.78rem; color: #9e9e9e; border: 1px solid #2c2c2c; pointer-events: none;
+    }
+    .markmap-node foreignObject div { color: #e0e0e0 !important; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Computer Science — Interactive Mind Map</h1>
+    <div class="controls">
+      <button onclick="fit()">Fit View</button>
+      <button onclick="expandAll()">Expand All</button>
+      <button onclick="collapseAll()">Collapse to Level 1</button>
+    </div>
+  </header>
+  <svg id="mindmap"></svg>
+  <div class="hint">Scroll to zoom · Drag to pan · Click nodes to expand/collapse</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-view@0.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.17"></script>
+  <script>
+    const markdown = `
+# Computer Science
+
+## Foundations
+
+### Mathematics
+
+#### Discrete Mathematics
+##### Set Theory
+- Relations
+- Functions
+- Cardinality
+##### Graph Theory
+- Trees
+- Connectivity
+- Coloring
+- Planarity
+##### Combinatorics
+- Counting
+- Pigeonhole
+- Generating Functions
+- Inclusion-Exclusion
+##### Number Theory Basics
+- Modular Arithmetic
+- Primes
+- GCD / Euclid
+
+#### Logic
+##### Propositional Logic
+##### Predicate Logic
+##### Boolean Algebra & Logic Gates
+##### Proof Techniques
+- Induction
+- Contradiction
+- Cases
+- Construction
+
+#### Probability
+##### Probability Theory
+- Sample Space
+- Events
+- Axioms
+- Conditional Probability
+- Bayes Theorem
+- Independence
+##### Random Variables
+- Discrete RVs
+- Continuous RVs
+- Expectation
+- Variance
+- Covariance
+- Moments
+##### Distributions
+###### Discrete Distributions
+- Bernoulli
+- Binomial
+- Poisson
+- Geometric
+###### Continuous Distributions
+- Uniform
+- Normal
+- Exponential
+- Gamma
+
+#### Statistics
+##### Statistical Inference
+###### Estimation
+- MLE
+- Confidence Intervals
+###### Hypothesis Testing
+- p-values
+- Significance
+###### Regression & Correlation
+- Linear Regression
+- Correlation
+
+#### Linear Algebra
+- Vectors
+- Matrices
+- Linear Systems
+- Gaussian Elimination
+- Eigenvalues
+- Eigenvectors
+- SVD
+- Vector Spaces
+- Basis
+- Rank
+- Nullspace
+
+#### Calculus
+- Derivatives
+- Partial Derivatives
+- Gradients
+- Optimization
+- Integrals
+- Series
+- CS Applications (Backprop, PCA, Graphics, Least Squares)
+
+#### Information Theory
+- Entropy
+- Mutual Information
+- Huffman Coding
+- Error-Correcting Codes
+- Channel Capacity
+
+#### Numerical Methods
+- Root Finding
+- Interpolation
+- Numerical Integration
+- Linear System Solvers
+- Floating-Point Arithmetic
+
+### Programming
+
+#### Programming Fundamentals
+##### Core Concepts
+- Variables
+- Types
+- Operators
+- I/O
+##### Control Structures
+- Conditionals
+- Loops
+##### Functions & Modularity
+- Recursion
+- Scope
+- Higher-order Functions
+##### Object-Oriented Programming
+- Classes
+- Inheritance
+- Polymorphism
+- Encapsulation
+##### Memory Basics
+- Pointers / References
+- Stack vs Heap
+##### Error Handling & Debugging
+
+#### Data Structures
+##### Linear Structures
+- Arrays
+- Linked Lists
+- Stacks
+- Queues
+- Deques
+##### Trees
+- BST
+- AVL
+- Red-Black Trees
+- Heaps
+- Tries
+- Segment Trees
+- Fenwick Trees
+##### Hash-based
+- Hash Tables
+- Sets
+- Maps
+- Bloom Filters
+##### Graphs
+- Adjacency List
+- Adjacency Matrix
+- BFS
+- DFS
+##### Advanced
+- B-Trees
+- Skip Lists
+- Union-Find
+- Priority Queues
+
+## Theoretical CS
+
+### Algorithms & Complexity
+#### Basic Algorithms
+##### Sorting
+- QuickSort
+- MergeSort
+- HeapSort
+- Insertion Sort
+- Counting Sort
+- Radix Sort
+##### Searching
+- Linear Search
+- Binary Search
+#### String Algorithms
+- KMP
+- Rabin-Karp
+- Suffix Arrays
+- Tries for Strings
+#### Graph Algorithms
+##### Shortest Paths
+- Dijkstra
+- Bellman-Ford
+- Floyd-Warshall
+##### MST
+- Kruskal
+- Prim
+##### Max Flow
+- Ford-Fulkerson
+- Edmonds-Karp
+##### Matching & Connectivity
+- Bipartite Matching
+- Strongly Connected Components
+#### Algorithmic Paradigms
+- Dynamic Programming
+- Greedy
+- Divide & Conquer
+- Backtracking
+- Branch & Bound
+#### Complexity Analysis
+- Big-O
+- Big-Omega
+- Big-Theta
+- P
+- NP
+- NP-Complete
+- NP-Hard
+#### Advanced Algorithms
+- Approximation Algorithms
+- Randomized Algorithms
+- Online Algorithms
+- Parallel Algorithms
+#### Computational Geometry
+- Convex Hull
+- Line Intersection
+- Closest Pair
+
+### Automata & Formal Languages
+#### Regular Languages
+- DFA
+- NFA
+- Regex
+- Pumping Lemma
+#### Context-Free Languages
+- CFG
+- PDA
+- Parsing
+#### Turing Machines
+- Decidability
+- Halting Problem
+#### Chomsky Hierarchy
+#### Closure Properties
+
+### Computability Theory
+#### Models of Computation
+- Turing Machines Variants
+- Lambda Calculus
+- Recursive Functions
+- Church-Turing Thesis
+#### Decidability
+- Decidable Problems
+- Undecidable Problems
+- Halting Problem
+- Rice's Theorem
+- RE Languages
+- co-RE Languages
+#### Reductions & Hardness
+- Many-one Reductions
+- Turing Reductions
+- Complete Problems
+#### Complexity Connections
+- Time Hierarchy Theorems
+- Space Hierarchy Theorems
+- P vs NP
+
+### Cryptography (Theory)
+#### Number Theory
+- Modular Arithmetic
+- Groups
+- Rings
+- Primality Testing
+- Factoring Hardness
+- Discrete Log
+- Elliptic Curves
+#### Primitives
+##### Symmetric
+- Block Ciphers
+- Stream Ciphers
+##### Public-Key
+- RSA
+- Diffie-Hellman
+- ECC
+##### Hash & MAC
+- Hash Functions
+- MACs
+#### Protocols & Proofs
+- IND-CPA
+- IND-CCA
+- Zero-Knowledge Proofs
+- Secure MPC
+- Secret Sharing
+#### Advanced Topics
+- Post-Quantum Cryptography
+- Homomorphic Encryption
+
+### Formal Methods
+#### Specification Languages
+#### Model Checking
+#### Theorem Proving
+#### Program Verification
+#### Temporal Logic
+
+## Computer Systems
+
+### Computer Architecture
+#### CPU & ISA
+- RISC
+- CISC
+- Registers
+- ALU
+- Instruction Set Design
+#### Memory System
+##### Caches
+- L1 Cache
+- L2 Cache
+- L3 Cache
+- Cache Coherence
+- Cache Replacement
+##### Virtual Memory
+- Paging
+- Segmentation
+- TLB
+#### Pipelining & Performance
+##### Hazards
+- Data Hazards
+- Control Hazards
+- Structural Hazards
+- Branch Prediction
+- Out-of-Order Execution
+#### Parallel & Multicore
+- SIMD
+- MIMD
+- GPU Architecture
+- Memory Consistency Models
+#### Storage & I/O
+- Disk
+- SSD
+- Interconnects
+- DMA
+
+### Operating Systems
+#### Process Management
+##### Threads
+- User-level Threads
+- Kernel-level Threads
+##### Scheduling
+- FCFS
+- SJF
+- Round Robin
+- Priority Scheduling
+- Multilevel Queue
+- Multilevel Feedback Queue
+##### IPC
+- Pipes
+- Message Queues
+- Shared Memory
+- Sockets
+#### Memory Management
+##### Paging
+- Page Tables
+- Multi-level Paging
+##### Replacement Algorithms
+- FIFO
+- LRU
+- Clock
+- Optimal
+#### File Systems & Storage
+##### Structures
+- Inodes
+- Directories
+##### Disk Scheduling
+- FCFS
+- SSTF
+- SCAN
+- C-SCAN
+##### RAID
+- RAID 0
+- RAID 1
+- RAID 5
+- RAID 10
+#### Concurrency
+##### Synchronization
+- Mutex
+- Semaphores
+- Monitors
+- Condition Variables
+##### Deadlock
+- Prevention
+- Avoidance
+- Detection
+- Recovery
+#### OS Security & Protection
+- Access Control
+- Capabilities
+- Sandboxing
+- System Calls
+
+### Computer Networks
+#### Network Layers
+- OSI Model
+- TCP/IP Model
+#### Routing & Switching
+##### Routing Algorithms
+- Distance Vector
+- Link State
+- Path Vector
+- BGP
+- IP
+#### Transport Layer
+- TCP
+- UDP
+##### Congestion Control
+- Slow Start
+- Congestion Avoidance
+- Fast Retransmit
+- Fast Recovery
+#### Application Protocols
+- HTTP
+- HTTPS
+- DNS
+- QUIC
+- SMTP
+- FTP
+#### Network Security
+- TLS
+- Firewalls
+- IDS
+- IPS
+- VPNs
+#### Advanced Networking
+- SDN
+- CDN
+- Wireless Networks
+- 5G Basics
+
+### Distributed Systems
+#### System Models
+- Synchronous
+- Asynchronous
+- CAP Theorem
+- PACELC
+#### Consensus & Coordination
+##### Consensus
+- Paxos
+- Raft
+- PBFT
+##### Time
+- Logical Clocks
+- Vector Clocks
+- NTP
+#### Data Management
+##### Replication
+- Primary-Backup
+- Multi-Primary
+- Quorum
+##### Sharding
+##### Consistency Models
+- Strong Consistency
+- Eventual Consistency
+- Causal Consistency
+#### Fault Tolerance
+- Failure Detection
+- Byzantine Faults
+- Gossip Protocols
+#### Distributed Transactions
+- 2PC
+- 3PC
+- Saga Pattern
+
+### Parallel & High-Performance Computing
+#### Parallel Models
+- Shared Memory
+- Distributed Memory
+- PRAM
+#### Programming Models
+- OpenMP
+- MPI
+- CUDA
+- OpenCL
+#### Performance
+- Speedup
+- Amdahl's Law
+- Scalability
+#### Architectures
+- Clusters
+- Supercomputers
+- Many-core
+
+### Embedded & Real-time
+#### Hardware Fundamentals
+- Microcontrollers
+- SoCs
+- GPIO
+- ADC
+- Timers
+- UART
+- Interrupts
+#### Real-time Concepts
+##### Hard vs Soft
+- Hard Real-time
+- Soft Real-time
+##### Scheduling
+- Rate Monotonic
+- EDF
+- WCET
+#### Software & RTOS
+- Tasks
+- Semaphores
+- Bare-metal
+- RTOS
+#### Applications
+- IoT Devices
+- Sensors
+- Automotive
+- Avionics
+
+## Software & Programming
+
+### Programming Languages
+#### Paradigms
+- Imperative
+- OOP
+- Functional
+- Logic
+- Concurrent
+#### Type Systems
+- Static Typing
+- Dynamic Typing
+- Type Inference
+- Type Safety
+- Dependent Types
+#### Memory & Runtime
+- Garbage Collection
+- Manual Memory
+- Stack
+- Heap
+- Memory Models
+#### Concurrency Models
+- Threads
+- Actors
+- CSP
+- Async / Await
+- STM
+#### Implementation
+- Interpreters
+- Compilers
+- VMs
+- JIT
+
+### Software Engineering
+#### Development Processes
+- Agile
+- Scrum
+- Kanban
+- Waterfall
+- Requirements Engineering
+#### Design & Architecture
+##### Design Patterns
+- Creational
+- Structural
+- Behavioral
+##### Architecture Styles
+- Microservices
+- Monolith
+- Event-Driven
+- Layered
+- UML
+#### Quality Assurance
+##### Testing
+- Unit Testing
+- Integration Testing
+- System Testing
+- Acceptance Testing
+- TDD
+- BDD
+- Property-Based Testing
+- Mutation Testing
+- Code Reviews
+#### DevOps & Delivery
+- CI/CD
+- Containers
+- Infrastructure as Code
+- Monitoring
+- Observability
+#### Project & Team Management
+- Estimation
+- Technical Debt
+- Refactoring
+
+### Compilers & Interpreters
+#### Frontend
+- Lexing
+- Parsing
+- Semantic Analysis
+- AST
+#### Middle-end
+- IR
+- Optimizations
+- Data-flow Analysis
+- SSA
+#### Backend
+- Instruction Selection
+- Register Allocation
+- Instruction Scheduling
+#### Runtime & Tools
+- VMs
+- JIT
+- Linkers
+- Debuggers
+
+### Databases
+#### Relational
+- SQL
+- Normalization
+- Keys
+- Joins
+- Indexes
+#### NoSQL
+- Document Stores
+- Key-Value Stores
+- Column Stores
+- Graph Databases
+#### Query Processing
+- Query Optimization
+- Indexing Strategies
+- Execution Plans
+#### Transactions & Concurrency
+- ACID
+##### Locking
+- Shared Locks
+- Exclusive Locks
+- 2PL
+- MVCC
+#### Database Design
+- ER Modeling
+- Schema Design
+- Normalization Forms
+#### Advanced Databases
+- Distributed Databases
+- NewSQL
+- Time-Series Databases
+- Vector Databases
+
+### Human-Computer Interaction
+#### Design Principles
+- Usability Heuristics
+- User-Centered Design
+- Accessibility
+- Inclusive Design
+#### Evaluation Methods
+- Usability Testing
+- A/B Testing
+- Cognitive Walkthrough
+- Heuristic Evaluation
+#### Interaction Techniques
+- GUI
+- CLI
+- Direct Manipulation
+- Touch
+- Gesture
+- Voice
+#### Advanced Interfaces
+- AR
+- VR
+- Brain-Computer Interfaces
+- Wearables
+
+### Web & Mobile Development
+#### Web Fundamentals
+- HTML
+- CSS
+- JavaScript
+- DOM
+#### Frontend Frameworks
+- React
+- Vue
+- Angular
+- Svelte
+#### Backend
+- REST
+- GraphQL
+- WebSockets
+- Server-Side Rendering
+#### Mobile
+- Native (iOS / Android)
+- Cross-platform
+- Responsive Design
+#### Web Security
+- XSS
+- CSRF
+- CORS
+- Content Security Policy
+
+## AI, ML & Data Science
+
+### Machine Learning
+#### Supervised Learning
+##### Regression
+- Linear Regression
+- Logistic Regression
+- Polynomial Regression
+##### Classification
+- SVM
+- Decision Trees
+- k-NN
+- Naive Bayes
+##### Ensembles
+- Random Forest
+- Gradient Boosting
+- Bagging
+- Stacking
+#### Unsupervised Learning
+##### Clustering
+- k-Means
+- Hierarchical
+- DBSCAN
+##### Dimensionality Reduction
+- PCA
+- t-SNE
+- UMAP
+#### Deep Learning
+- MLPs
+- CNNs
+- RNNs
+- LSTMs
+- Transformers
+- Attention Mechanisms
+#### Reinforcement Learning
+- MDPs
+- Q-Learning
+- Policy Gradients
+- Actor-Critic
+- Deep RL
+#### Learning Paradigms
+- Transfer Learning
+- Self-Supervised Learning
+- Semi-Supervised Learning
+- Few-Shot Learning
+#### ML Practice & MLOps
+##### Evaluation
+- Accuracy
+- Precision
+- Recall
+- F1
+- ROC-AUC
+- Confusion Matrix
+##### Pipeline
+- Feature Engineering
+- Hyperparameter Tuning
+- Deployment
+- Monitoring
+- Model Versioning
+
+### Artificial Intelligence
+#### Search & Problem Solving
+- BFS
+- DFS
+- A*
+- Adversarial Search
+- Heuristic Search
+#### Knowledge & Reasoning
+- Logic
+- Ontologies
+- Bayesian Networks
+- Knowledge Graphs
+#### Planning & Decision Making
+- Classical Planning
+- MDPs for Planning
+#### Intelligent Agents
+- Agent Architectures
+- Multi-agent Systems
+- Rational Agents
+#### Robotics Basics
+- Perception
+- Planning
+- Control
+- SLAM
+
+### Computer Vision & NLP
+#### Computer Vision
+- Image Classification
+- Object Detection
+- Segmentation
+- Tracking
+- 3D Vision
+- Image Generation
+#### Natural Language Processing
+- Embeddings
+- Word2Vec
+- Seq2Seq
+- Transformers for NLP
+- LLMs
+- Prompting
+- Agents
+- NLP Tasks
+  - Classification
+  - NER
+  - Machine Translation
+  - Summarization
+  - Question Answering
+#### Speech
+- Speech Recognition
+- Speech Synthesis
+#### Multimodal & Generative
+- Vision-Language Models
+- Diffusion Models
+- GANs
+- Autoregressive Models
+
+### Big Data & Analytics
+#### Data Engineering
+- ETL Pipelines
+- ELT Pipelines
+- Data Quality
+- Data Governance
+- Streaming Ingestion
+- Batch Ingestion
+#### Processing Frameworks
+- MapReduce
+- Hadoop
+- Apache Spark
+- Apache Flink
+- Distributed Computing Patterns
+#### Storage & Warehousing
+- Data Lakes
+- Lakehouses
+- Data Warehouses
+- Columnar Stores
+#### Analytics & Visualization
+- Descriptive Analytics
+- Predictive Analytics
+- Prescriptive Analytics
+- Dashboards
+- BI Tools
+- Real-time Analytics
+
+## Specialized
+
+### Graphics & Visualization
+#### Rendering Pipeline
+- Rasterization
+- Ray Tracing
+- Path Tracing
+- Shaders
+#### Real-time & Interactive
+- Game Engines
+- Animation
+- Physics Simulation
+#### Geometric Processing
+- Meshes
+- Subdivision
+- Computational Geometry
+#### Scientific & Info Vis
+#### Immersive
+- VR
+- AR
+- XR
+
+### Cybersecurity
+#### Cryptography in Practice
+- Symmetric Crypto
+- Asymmetric Crypto
+- Hashing
+- Digital Signatures
+- Certificates
+#### Network Security
+- TLS
+- Firewalls
+- IDS
+- IPS
+- VPNs
+#### Application Security
+- OWASP Top 10
+- Secure Coding
+- Authentication
+- Authorization
+- Input Validation
+#### System & Endpoint Security
+- Hardening
+- Malware Analysis
+- Reverse Engineering
+#### Security Operations
+- Threat Modeling
+- Incident Response
+- SIEM
+- Penetration Testing
+#### Privacy & Identity
+- Differential Privacy
+- MFA
+- SSO
+- Zero Trust
+
+### Quantum Computing
+#### Quantum Basics
+- Qubits
+- Superposition
+- Entanglement
+- Measurement
+#### Gates & Circuits
+- Single-qubit Gates
+- Multi-qubit Gates
+- Quantum Circuits
+#### Quantum Algorithms
+- Shor's Algorithm
+- Grover's Algorithm
+- Quantum Simulation
+- VQE
+- QAOA
+#### Hardware & Error Correction
+- Quantum Hardware Platforms
+- Decoherence
+- Quantum Error Correction
+
+### Bioinformatics & Comp. Biology
+#### Sequence Analysis
+- Sequence Alignment
+- BLAST
+- Smith-Waterman
+- Genome Assembly
+- Annotation
+- Phylogenetics
+#### Structure & Function
+- Protein Structure Prediction
+- Molecular Docking
+- Molecular Dynamics
+#### Genomics & Systems
+- NGS Data Analysis
+- RNA-seq
+- ChIP-seq
+- Systems Biology
+- Biological Networks
+#### Algorithms & Tools
+- Dynamic Programming in Biology
+- Hidden Markov Models
+- ML in Bioinformatics
+
+### Game Development
+#### Game Engines
+- Unity
+- Unreal
+- Godot
+- Custom Engines
+#### Core Systems
+- Physics
+- Animation
+- Skeletal Systems
+- Audio
+- Input
+#### Game AI & Gameplay
+- Pathfinding
+- Behavior Trees
+- Decision Trees
+- Game Design Patterns
+- Game Mechanics
+#### Production & Tools
+- Asset Pipelines
+- Content Tools
+- Networking
+- Multiplayer
+- Optimization
+
+### Cloud, Edge & Serverless
+#### Cloud Architecture
+- IaaS
+- PaaS
+- SaaS
+- Microservices
+- Multi-cloud
+#### Containers & Orchestration
+- Docker
+- Kubernetes
+- Service Mesh
+#### Serverless
+- FaaS
+- Event-driven Serverless
+#### Edge Computing
+#### Distributed Cloud
+#### Cloud Operations
+- IAM
+- Cost Optimization
+- Observability
+- Auto-scaling
+
+### Blockchain & Distributed Ledgers
+#### Core Concepts
+- Consensus in Blockchain
+- Merkle Trees
+- Cryptographic Hashing
+#### Platforms
+- Bitcoin
+- Ethereum
+- Smart Contracts
+#### Applications
+- Cryptocurrencies
+- DeFi
+- NFTs
+- Supply Chain
+
+### Ethics & Societal Impact
+#### Responsible AI
+- Bias & Fairness
+- Transparency
+- Accountability
+#### Privacy
+#### Security Ethics
+#### Environmental Impact
+#### Professional Ethics
+`;
+
+    const { Transformer } = window.markmap;
+    const transformer = new Transformer();
+    const { root } = transformer.transform(markdown);
+
+    const DOMAIN = {
+      root: '#60a5fa',
+      foundations: '#a3a3a3',
+      theory: '#60a5fa',
+      systems: '#4ade80',
+      software: '#fb923c',
+      ai: '#c084fc',
+      apps: '#f472b6',
+    };
+
+    function clean(t) { return (t || '').replace(/<[^>]*>/g, '').trim(); }
+
+    function assignDomainColors(node, domainColor) {
+      const content = clean(node.content || node.data?.content);
+      let color = domainColor;
+      if (!domainColor) {
+        if (content === 'Computer Science' || (node.state && node.state.depth === 0))
+          color = DOMAIN.root;
+      }
+      if (content === 'Foundations' || content.startsWith('Foundations')) color = DOMAIN.foundations;
+      else if (content === 'Theoretical CS' || content.startsWith('Theoretical')) color = DOMAIN.theory;
+      else if (content === 'Computer Systems' || content.startsWith('Computer Systems')) color = DOMAIN.systems;
+      else if (content === 'Software & Programming' || content.startsWith('Software')) color = DOMAIN.software;
+      else if (content === 'AI, ML & Data Science' || content.startsWith('AI')) color = DOMAIN.ai;
+      else if (content === 'Specialized' || content.startsWith('Specialized')) color = DOMAIN.apps;
+      node._color = color || domainColor || DOMAIN.root;
+      (node.children || []).forEach(c => assignDomainColors(c, node._color));
+    }
+    assignDomainColors(root, null);
+
+    const { Markmap } = window.markmap;
+    const mm = Markmap.create('#mindmap', {
+      autoFit: true,
+      duration: 350,
+      maxWidth: 210,
+      color: n => n._color || DOMAIN.root,
+      paddingX: 8,
+      spacingVertical: 4,
+      spacingHorizontal: 55,
+    }, root);
+
+    setTimeout(() => {
+      document.querySelectorAll('.markmap-link').forEach(el => el.setAttribute('stroke-opacity', '0.5'));
+    }, 200);
+
+    function collapseToDepth(depth) {
+      function walk(node, d) {
+        if (d >= depth && node.children) {
+          node.payload = node.payload || {};
+          node.payload.fold = true;
+        }
+        (node.children || []).forEach(c => walk(c, d + 1));
+      }
+      walk(root, 0);
+      mm.setData(root);
+      mm.fit();
+      setTimeout(() => {
+        document.querySelectorAll('.markmap-link').forEach(el => el.setAttribute('stroke-opacity', '0.5'));
+      }, 50);
+    }
+
+    setTimeout(() => collapseToDepth(1), 150);
+
+    window.fit = () => mm.fit();
+    window.expandAll = () => {
+      function walk(node) {
+        if (node.payload) node.payload.fold = false;
+        (node.children || []).forEach(walk);
+      }
+      walk(root);
+      mm.setData(root);
+      mm.fit();
+      setTimeout(() => {
+        document.querySelectorAll('.markmap-link').forEach(el => el.setAttribute('stroke-opacity', '0.5'));
+      }, 50);
+    };
+    window.collapseAll = () => collapseToDepth(1);
+  </script>
+</body>
+</html>
